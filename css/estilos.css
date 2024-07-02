@@ -26,6 +26,10 @@
     margin: auto;
     margin-top: 50px;
   }
+
+  .footer {
+    margin-top: auto;
+  }
   
   .titulo {
     text-align: center;
@@ -156,3 +160,5 @@ h2 {
     font-size: 18px;
     color: aquamarine;
 }
+
+

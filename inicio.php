@@ -7,13 +7,13 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Inicio - }Jopi G Center</title>
+    <title>Página de Inicio - Jopi G Center</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet"href="estilos.css">
     <style>
       body{
-        background-image: url('img/fondo1.jpeg');
+        background-image: url('img/fondo2.jpeg');
         background-size: cover;
         background-repeat: no-repeat;
         background-attachment: fixed;
@@ -49,13 +49,41 @@ session_start();
 <!-- Jumbotron de bienvenida -->
 <div class="container mt-5">
     <div class="jumbotron text-center">
-        <h1 class="display-4">Bienvenido a NexGen</h1>
+        <h1 class="display-4">Bienvenido a Jopi G Center</h1>
         <?php if (isset($_SESSION['username'])): ?>
             <p class="lead">Hola, <?php echo htmlspecialchars($_SESSION['username']); ?>. ¡Has iniciado sesión exitosamente!</p>
         <?php else: ?>
-            <p class="lead">Tienda virtual de productos electrónicos</p>
+            <p class="lead">Tienda virtual de productos farmacéuticos</p>
         <?php endif; ?>
     </div>
+</div>
+
+<!-- Carusel de imagenes -->
+<div id="carouselExampleIndicators" class="carousel slide">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="..." class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item">
+      <img src="..." class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item">
+      <img src="..." class="d-block w-100" alt="...">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
 </div>
 
 <!-- Sección de características -->
@@ -133,7 +161,7 @@ session_start();
 
 <!-- Footer -->
 <footer class="bg-dark text-white text-center mt-5 py-3">
-    <p>&copy; 2024 NexGenF. Todos los derechos reservados.</p>
+    <p>Copyright &copy; Jopi G Center 2024 Todos los derechos reservados.</p>
 </footer>
 
 <!-- Bootstrap JS -->
