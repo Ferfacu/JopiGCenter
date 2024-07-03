@@ -10,7 +10,7 @@ session_start();
     <title>Página de Inicio - Jopi G Center</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet"href="estilos.css">
+    <link rel="stylesheet" href="estilos.css">
     <style>
       body{
         background-image: url('img/fondo2.jpeg');
@@ -24,12 +24,15 @@ session_start();
 
 <!-- Barra de navegación -->
 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-    <a class="navbar-brand" href="#">Jopi G Center</a><img src="img/logo1.png" width="50">
+    <a class="navbar-brand" href="inicio.php"><img src="img/logo1.png" width="50"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="productos.php">Productos</a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="index.php">Cerrar Sesión</a>
             </li>
@@ -42,6 +45,11 @@ session_start();
                     <a class="nav-link" href="registro.php">Registrarse</a>
                 </li>
             <?php endif; ?>
+            <li class="nav-item">
+                <a class="nav-link" href="carrito.php">
+                    <i class="fas fa-shopping-cart"></i> Carrito
+                </a>
+            </li>
         </ul>
     </div>
 </nav>
@@ -59,31 +67,40 @@ session_start();
 </div>
 
 <!-- Carusel de imagenes -->
-<div id="carouselExampleIndicators" class="carousel slide">
-  <div class="carousel-indicators">
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-  </div>
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img src="..." class="d-block w-100" alt="...">
+<div class="container mt-5">
+    <div id="carouselExample" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+        <img src="img/carusel1.jpeg" class="d-block w-100" alt="carusel1">
+        </div>
+        <div class="carousel-item">
+        <img src="img/carusel2.jpeg" class="d-block w-100" alt="carusel2">
+        </div>
+        <div class="carousel-item">
+        <img src="img/carusel3.jpeg" class="d-block w-100" alt="carusel3">
+        </div>
+        <div class="carousel-item">
+        <img src="img/carusel4.jpeg" class="d-block w-100" alt="carusel4">
+        </div>
+        <div class="carousel-item">
+        <img src="img/carusel5.jpeg" class="d-block w-100" alt="carusel5">
+        </div>
+        <div class="carousel-item">
+        <img src="img/carusel6.jpeg" class="d-block w-100" alt="carusel6">
+        </div>
+        <div class="carousel-item">
+        <img src="img/carusel7.jpeg" class="d-block w-100" alt="carusel7">
+        </div>
     </div>
-    <div class="carousel-item">
-      <img src="..." class="d-block w-100" alt="...">
+    <a class="carousel-control-prev" href="#carouselExample" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExample" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
     </div>
-    <div class="carousel-item">
-      <img src="..." class="d-block w-100" alt="...">
-    </div>
-  </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
 </div>
 
 <!-- Sección de características -->
@@ -161,7 +178,7 @@ session_start();
 
 <!-- Footer -->
 <footer class="bg-dark text-white text-center mt-5 py-3">
-    <p>Copyright &copy; Jopi G Center 2024 Todos los derechos reservados.</p>
+    <p>      Copyright &copy; Jopi G Center 2024 Todos los derechos reservados </p>
 </footer>
 
 <!-- Bootstrap JS -->
