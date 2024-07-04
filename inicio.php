@@ -18,6 +18,7 @@ session_start();
         background-repeat: no-repeat;
         background-attachment: fixed;
       }
+      
     </style>
 </head>
 <body>
@@ -31,7 +32,16 @@ session_start();
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="productos.php">Productos</a>
+                <a class="nav-link" href="Inicio.php">Inicio</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="productos.php">Quienes Somos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="productos.php">Tienda</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="contactenos.php">Contáctenos</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="index.php">Cerrar Sesión</a>
@@ -48,6 +58,9 @@ session_start();
             <li class="nav-item">
                 <a class="nav-link" href="carrito.php">
                     <i class="fas fa-shopping-cart"></i> Carrito
+                    <?php if (isset($_SESSION['carrito']) && count($_SESSION['carrito']) > 0): ?>
+                        <span class="badge badge-pill badge-danger"><?php echo count($_SESSION['carrito']); ?></span>
+                    <?php endif; ?>
                 </a>
             </li>
         </ul>
@@ -176,9 +189,12 @@ session_start();
     </div>
 </div>
 
-<!-- Footer -->
-<footer class="bg-dark text-white text-center mt-5 py-3">
-    <p>      Copyright &copy; Jopi G Center 2024 Todos los derechos reservados </p>
+
+
+<footer class="footer">
+    <div class="container mt-2 text-center">
+        <p>&copy; Jopi G Center 2024 Todos los derechos reservados</p>
+    </div>
 </footer>
 
 <!-- Bootstrap JS -->

@@ -4,6 +4,19 @@ $productos = [
     ['id' => 1, 'nombre' => 'Producto 1', 'precio' => 10.00, 'descripcion' => 'Descripción del producto 1'],
     ['id' => 2, 'nombre' => 'Producto 2', 'precio' => 20.00, 'descripcion' => 'Descripción del producto 2'],
     ['id' => 3, 'nombre' => 'Producto 3', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 3'],
+    ['id' => 4, 'nombre' => 'Producto 4', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 4'],
+    ['id' => 5, 'nombre' => 'Producto 5', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 5'],
+    ['id' => 6, 'nombre' => 'Producto 6', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 6'],
+    ['id' => 7, 'nombre' => 'Producto 7', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 7'],
+    ['id' => 8, 'nombre' => 'Producto 8', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 8'],
+    ['id' => 9, 'nombre' => 'Producto 9', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 9'],
+    ['id' => 10, 'nombre' => 'Producto 10', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 10'],
+    ['id' => 11, 'nombre' => 'Producto 11', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 11'],
+    ['id' => 12, 'nombre' => 'Producto 12', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 12'],
+    ['id' => 13, 'nombre' => 'Producto 13', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 13'],
+    ['id' => 14, 'nombre' => 'Producto 14', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 14'],
+    ['id' => 15, 'nombre' => 'Producto 15', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 15'],
+    ['id' => 16, 'nombre' => 'Producto 16', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 16'],
 ];
 
 if (isset($_POST['agregar'])) {
@@ -41,7 +54,7 @@ if (isset($_POST['agregar'])) {
         }
     }
 
-    header('Location: productos.php');
+    header('Location: carrito.php');
     exit;
 }
 ?>
@@ -65,6 +78,10 @@ if (isset($_POST['agregar'])) {
     </button>
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav ml-auto">
+            <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
             <li class="nav-item">
                 <a class="nav-link" href="productos.php">Productos</a>
             </li>
