@@ -1,5 +1,4 @@
 <?php
-session_start();
 require 'conexion.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -7,20 +6,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $contraseña = $_POST['contraseña'];
 
-    // Verificar si el email ya está registrado
-    $sql = "SELECT id_usuario FROM usuarios WHERE email = '$email'";
-    $resultado = $conn->query($sql);
+    // Encriptar la contraseña
+    $hashed_password = password_hash($contraseña, PASSWORD_DEFAULT);
 
-    if ($resultado->num_rows > 0) {
-        echo "El email ya está registrado.";
-    } else {
-        // Insertar el nuevo usuario en la base de datos
-        $sql = "INSERT INTO usuarios (nombre, email, contraseña) VALUES ('$nombre', '$email', '$contraseña')";
-        if ($conn->query($sql) === TRUE) {
-            echo "Registro exitoso. Ahora puedes iniciar sesión.";
+    // Insertar el nuevo usuario en la base de datos
+    $sql = "INSERT INTO usuarios (nombre, email, contraseña) VALUES (?, ?, ?)";
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param("sss", $nombre, $email, $hashed_password);
+        if ($stmt->execute()) {
+            echo "Registro exitoso. Puedes iniciar sesión ahora.";
         } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+            echo "Error: " . $stmt->error;
         }
+        $stmt->close();
     }
 }
 ?>
@@ -30,20 +28,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrarse</title>
+    <title>Registro</title>
     <!-- Agregar Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container mt-5">
-    <div class="text-center">
+        <div class="text-center">
             <img src="img/logo2.png" alt="Logo de la empresa">
-    </div>
-
-        <h2 class="text-center">Registrarse</h2>
+        </div>
+        <h3 class="text-center">Registro</h3>
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <form method="post" action="">
+                <form method="post" action="registro.php">
                     <div class="form-group">
                         <label for="nombre">Nombre:</label>
                         <input type="text" class="form-control" id="nombre" name="nombre" required>
@@ -56,10 +53,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <label for="contraseña">Contraseña:</label>
                         <input type="password" class="form-control" id="contraseña" name="contraseña" required>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Registrarse</button>
+                    <button type="submit" class="btn btn-primary btn-block">Registrar</button>
                 </form>
                 <div class="text-center mt-3">
-                    <p>¿Ya tienes una cuenta? <a href="index.php">Inicia sesión aquí</a>.</p>
+                    <p>¿Ya tienes una cuenta? <a href="login.php">Inicia sesión aquí</a>.</p>
                 </div>
             </div>
         </div>
