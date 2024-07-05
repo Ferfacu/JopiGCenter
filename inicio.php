@@ -2,6 +2,68 @@
 session_start();
 ?>
 
+<!-- Sección productos -->
+    <?php
+    session_start();
+    $productos = [
+    ['id' => 1, 'nombre' => 'Acetazolamida', 'precio' => 80.00, 'descripcion' => 'Acetazolamida 250mg Tableta cjax100 AC farma', 'imagen' => 'img/productos/acetazolamida.jpg'],
+    ['id' => 2, 'nombre' => 'Producto 2', 'precio' => 20.00, 'descripcion' => 'Descripción del producto 2'],
+    ['id' => 3, 'nombre' => 'Producto 3', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 3'],
+    ['id' => 4, 'nombre' => 'Producto 4', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 4'],
+    ['id' => 5, 'nombre' => 'Producto 5', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 5'],
+    ['id' => 6, 'nombre' => 'Producto 6', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 6'],
+    ['id' => 7, 'nombre' => 'Producto 7', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 7'],
+    ['id' => 8, 'nombre' => 'Producto 8', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 8'],
+    ['id' => 9, 'nombre' => 'Producto 9', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 9'],
+    ['id' => 10, 'nombre' => 'Producto 10', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 10'],
+    ['id' => 11, 'nombre' => 'Producto 11', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 11'],
+    ['id' => 12, 'nombre' => 'Producto 12', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 12'],
+    ['id' => 13, 'nombre' => 'Producto 13', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 13'],
+    ['id' => 14, 'nombre' => 'Producto 14', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 14'],
+    ['id' => 15, 'nombre' => 'Producto 15', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 15'],
+    ['id' => 16, 'nombre' => 'Producto 16', 'precio' => 30.00, 'descripcion' => 'Descripción del producto 16'],
+    ];
+
+    if (isset($_POST['agregar'])) {
+        $id = $_POST['id'];
+        $cantidad = $_POST['cantidad'];
+
+        $producto_encontrado = false;
+
+        foreach ($productos as $producto) {
+            if ($producto['id'] == $id) {
+                $producto_encontrado = true;
+                $producto_agregar = $producto;
+                break;
+            }
+        }
+
+        if ($producto_encontrado) {
+            $producto_agregar['cantidad'] = $cantidad;
+
+            if (!isset($_SESSION['carrito'])) {
+                $_SESSION['carrito'] = [];
+            }
+
+            $producto_existe = false;
+            foreach ($_SESSION['carrito'] as &$item) {
+                if ($item['id'] == $producto_agregar['id']) {
+                    $item['cantidad'] += $cantidad;
+                    $producto_existe = true;
+                    break;
+                }
+            }
+
+            if (!$producto_existe) {
+                $_SESSION['carrito'][] = $producto_agregar;
+            }
+        }
+
+        header('Location: carrito.php');
+        exit;
+    }
+    ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -119,62 +181,34 @@ session_start();
     </div>
 
 
-    <!-- Sección de los fundadores -->
+    
+
+    <!-- Listado de productos -->
     <div class="container mt-5">
+        <h1>Productos</h1>
         <div class="row">
-            <div class="col-md-12">
-                <h2 style="color:chartreuse" class="text-center">Nuestros Fundadores</h2>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card">
-                    <img class="card-img-top" src="img/logof.jpg" width="20px" alt="Fundador 1">
-                    <div class="card-body">
-                        <h5 class="card-title">Huaman Ciprian Diego</h5>
-                        <p class="card-text">Breve descripción del fundador 1.</p>
+            <?php foreach ($productos as $producto): ?>
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <img src="<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
+                        <div class="card-body">
+                            <h5 class="card-title"><?php echo htmlspecialchars($producto['nombre']); ?></h5>
+                            <p class="card-text"><?php echo htmlspecialchars($producto['descripcion']); ?></p>
+                            <p class="card-text">S/. <?php echo htmlspecialchars($producto['precio']); ?> </p>
+                            <form method="post" action="productos.php">
+                                <input type="hidden" name="id" value="<?php echo $producto['id']; ?>">
+                                <div class="form-group">
+                                    <label for="cantidad">Cantidad:</label>
+                                    <input type="number" class="form-control" name="cantidad" value="1" min="1">
+                                </div>
+                                <button type="submit" name="agregar" class="btn btn-primary">Agregar al Carrito</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <img class="card-img-top" src="img/logof.jpg" alt="Fundador 2">
-                    <div class="card-body">
-                        <h5 class="card-title">Ramos  Sarmiento Raymond  Joel  </h5>
-                        <p class="card-text">Breve descripción del fundador 2.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <img class="card-img-top" src="img/logof.jpg" alt="Fundador 3">
-                    <div class="card-body">
-                        <h5 class="card-title">Nombre del Fundador 3</h5>
-                        <p class="card-text">Breve descripción del fundador 3.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <img class="card-img-top" src="img/logof.jpg" alt="Fundador 4">
-                    <div class="card-body">
-                        <h5 class="card-title">Nombre del Fundador 4</h5>
-                        <p class="card-text">Breve descripción del fundador 3.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <img class="card-img-top" src="img/logof.jpg" alt="Fundador 5">
-                    <div class="card-body">
-                        <h5 class="card-title">Nombre del Fundador 5</h5>
-                        <p class="card-text">Breve descripción del fundador 3.</p>
-                    </div>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
     </div>
-
 
     <!-- Footer -->
     <footer class="footer bg-dark text-white text-center mt-5 py-3">
