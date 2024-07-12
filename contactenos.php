@@ -18,6 +18,19 @@ session_start();
         background-repeat: no-repeat;
         background-attachment: fixed;
       }
+      .card-img-container {
+        height: 200px; /* Ajusta esta altura según tus necesidades */
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        }
+
+        .card-img-top {
+            max-height: 100%;
+            width: auto;
+            object-fit: cover;
+        }
       
     </style>
 </head>
@@ -32,22 +45,39 @@ session_start();
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="inicio.php">Inicio</a>
+                    <a class="nav-link" href="Inicio.php">Inicio</a>
                 </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="somos.php">Quienes Somos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="productos.php">Tienda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contactenos.php">Contáctenos</a>
+                    </li>
+                <?php if (isset($_SESSION['username'])): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="perfil.php"><?php echo htmlspecialchars($_SESSION['username']); ?></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.php">Cerrar Sesión</a>
+                    </li>
+                <?php else: ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.php">Iniciar Sesión</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="registro.php">Registrarse</a>
+                    </li>
+                <?php endif; ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="productos.php">Quienes Somos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="productos.php">Tienda</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="contactenos.php">Contáctenos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="perfil.php">Perfil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="logout.php">Cerrar Sesión</a>
+                    <a class="nav-link" href="carrito.php">
+                        <i class="fas fa-shopping-cart"></i> Carrito
+                        <?php if (isset($_SESSION['carrito']) && count($_SESSION['carrito']) > 0): ?>
+                            <span class="badge badge-pill badge-danger"><?php echo count($_SESSION['carrito']); ?></span>
+                        <?php endif; ?>
+                    </a>
                 </li>
             </ul>
         </div>

@@ -1,30 +1,33 @@
 <?php
 session_start();
+require 'conexion.php';
 
-if (!isset($_SESSION['carrito']) || empty($_SESSION['carrito'])) {
-    $carrito_vacio = true;
-} else {
-    $carrito_vacio = false;
+if (isset($_GET['add'])) {
+    $id_producto = $_GET['add'];
+    if (!isset($_SESSION['carrito'])) {
+        $_SESSION['carrito'] = [];
+    }
+    if (isset($_SESSION['carrito'][$id_producto])) {
+        $_SESSION['carrito'][$id_producto]++;
+    } else {
+        $_SESSION['carrito'][$id_producto] = 1;
+    }
 }
 
-function calcular_total($carrito) {
-    $total = 0;
-    foreach ($carrito as $producto) {
-        $total += $producto['precio'] * $producto['cantidad'];
-    }
-    return $total;
-}
+$carrito = isset($_SESSION['carrito']) ? $_SESSION['carrito'] : [];
 
-if (isset($_POST['eliminar'])) {
-    $id = $_POST['id'];
-    foreach ($_SESSION['carrito'] as $key => $producto) {
-        if ($producto['id'] == $id) {
-            unset($_SESSION['carrito'][$key]);
-        }
+$productos = [];
+$total = 0;
+
+if (!empty($carrito)) {
+    $ids = implode(',', array_keys($carrito));
+    $sql = "SELECT * FROM productos WHERE id_producto IN ($ids)";
+    $result = $conn->query($sql);
+    while ($row = $result->fetch_assoc()) {
+        $row['cantidad'] = $carrito[$row['id_producto']];
+        $productos[] = $row;
+        $total += $row['precio'] * $carrito[$row['id_producto']];
     }
-    $_SESSION['carrito'] = array_values($_SESSION['carrito']);
-    header('Location: carrito.php');
-    exit;
 }
 ?>
 
@@ -33,88 +36,88 @@ if (isset($_POST['eliminar'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrito de Compras - Jopi G Center</title>
+    <title>Carrito de Compras</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-
-<!-- Barra de navegación -->
-<nav class="navbar navbar-expand-md bg-dark navbar-dark">
-    <a class="navbar-brand" href="index.php"><img src="img/logo1.png" width="50"></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="productos.php">Productos</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="index.php">Cerrar Sesión</a>
-            </li>
-            <?php if (isset($_SESSION['username'])): ?>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+        <a class="navbar-brand" href="#"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="logout.php">Cerrar Sesión</a>
+                    <a class="nav-link" href="Inicio.php">Inicio</a>
                 </li>
-            <?php else: ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="somos.php">Quienes Somos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="productos.php">Tienda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contactenos.php">Contáctenos</a>
+                    </li>
+                <?php if (isset($_SESSION['username'])): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="perfil.php"><?php echo htmlspecialchars($_SESSION['username']); ?></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.php">Cerrar Sesión</a>
+                    </li>
+                <?php else: ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.php">Iniciar Sesión</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="registro.php">Registrarse</a>
+                    </li>
+                <?php endif; ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="registro.php">Registrarse</a>
+                    <a class="nav-link" href="carrito.php">
+                        <i class="fas fa-shopping-cart"></i> Carrito
+                        <?php if (isset($_SESSION['carrito']) && count($_SESSION['carrito']) > 0): ?>
+                            <span class="badge badge-pill badge-danger"><?php echo count($_SESSION['carrito']); ?></span>
+                        <?php endif; ?>
+                    </a>
                 </li>
-            <?php endif; ?>
-            <li class="nav-item">
-                <a class="nav-link" href="carrito.php">
-                    <i class="fas fa-shopping-cart"></i> Carrito
-                </a>
-            </li>
-        </ul>
-    </div>
-</nav>
+            </ul>
+        </div>
+    </nav>
 
-<!-- Contenido del carrito -->
-<div class="container mt-5">
-    <h1>Carrito de Compras</h1>
-    <?php if ($carrito_vacio): ?>
-        <p>Tu carrito está vacío.</p>
-    <?php else: ?>
-        <table class="table">
+    <div class="container mt-5">
+        <h3 class="text-center">Carrito de Compras</h3>
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Producto</th>
-                    <th>Precio</th>
                     <th>Cantidad</th>
-                    <th>Total</th>
-                    <th>Acciones</th>
+                    <th>Precio</th>
+                    <th>Subtotal</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($_SESSION['carrito'] as $producto): ?>
+                <?php foreach ($productos as $producto): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($producto['nombre']); ?></td>
-                        <td><?php echo htmlspecialchars($producto['precio']); ?>$</td>
-                        <td><?php echo htmlspecialchars($producto['cantidad']); ?></td>
-                        <td><?php echo htmlspecialchars($producto['precio'] * $producto['cantidad']); ?>$</td>
-                        <td>
-                            <form method="post" action="carrito.php">
-                                <input type="hidden" name="id" value="<?php echo $producto['id']; ?>">
-                                <button type="submit" name="eliminar" class="btn btn-danger">Eliminar</button>
-                            </form>
-                        </td>
+                        <td><?php echo $producto['descripcion']; ?></td>
+                        <td><?php echo $producto['cantidad']; ?></td>
+                        <td>$<?php echo $producto['precio']; ?></td>
+                        <td>$<?php echo $producto['precio'] * $producto['cantidad']; ?></td>
                     </tr>
                 <?php endforeach; ?>
+                <tr>
+                    <td colspan="3">Total</td>
+                    <td>$<?php echo $total; ?></td>
+                </tr>
             </tbody>
         </table>
-        <div class="text-right">
-            <h4>Total: <?php echo calcular_total($_SESSION['carrito']); ?>$</h4>
-            <a href="checkout.php" class="btn btn-primary">Proceder al Pago</a>
-        </div>
-    <?php endif; ?>
-</div>
-<div class="container mt-2">
-<a href="productos.php">Regresar a productos</a>
-</div>
-<!-- Bootstrap JS -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <a href="checkout.php" class="btn btn-success">Proceder al Pago</a>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

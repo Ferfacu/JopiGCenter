@@ -1,15 +1,23 @@
 <?php
 session_start();
+require 'conexion.php';
 
-$nombre = $_POST['nombre'];
-$email = $_POST['email'];
-$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nombre = $_POST['nombre'];
+    $email = $_POST['email'];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-// Guardar el usuario en la sesión
-$_SESSION['username'] = $nombre;
-$_SESSION['email'] = $email;
-
-// Redirigir al usuario a la página de productos
-header('Location: productos.php');
-exit;
+    $sql = "INSERT INTO usuarios (nombre, email, contraseña) VALUES (?, ?, ?)";
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param("sss", $nombre, $email, $password);
+        if ($stmt->execute()) {
+            $_SESSION['welcome_message'] = "Registro exitoso. Bienvenido!";
+            header("Location: login.php");
+        } else {
+            $_SESSION['error_message'] = "Error en el registro.";
+            header("Location: registro.php");
+        }
+        $stmt->close();
+    }
+}
 ?>
