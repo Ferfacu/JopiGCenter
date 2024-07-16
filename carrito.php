@@ -38,6 +38,28 @@ if (!empty($carrito)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrito de Compras</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+      body{
+        background-image: url('img/fondo2.jpeg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+      }
+      .card-img-container {
+        height: 200px; /* Ajusta esta altura según tus necesidades */
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        }
+
+        .card-img-top {
+            max-height: 100%;
+            width: auto;
+            object-fit: cover;
+        }
+      
+    </style>
 </head>
 <body>
     <!-- Barra de navegación -->
