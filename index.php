@@ -1,64 +1,35 @@
 <?php
 session_start();
-?>
 
-<!-- Sección productos -->
-    <?php
-    $productos = [
-    ['id' => 1, 'precio' => 80.00, 'descripcion' => 'Acetazolamida 250mg Tableta cjax100 AC farma', 'imagen' => 'img/productos/acetazolamida.jpg'],
-    ['id' => 2, 'precio' => 24.40, 'descripcion' => 'Aci-Tip 800mg-60mg/10ml Suspensión – Frasco 200 ML', 'imagen' => 'img/productos/acitip.jpg'],
-    ['id' => 3, 'precio' => 90.00, 'descripcion' => 'Amiodarona 200mg Tableta Recubierta cjax100 AC Farma', 'imagen' => 'img/productos/amiodarona.jpg'],
-    ['id' => 4, 'precio' => 0.95, 'descripcion' => 'Anaflex Mujer NF 200mg Cápsula Blanda', 'imagen' => 'img/productos/anaflex.jpg'],
-    ['id' => 5, 'precio' => 410.00, 'descripcion' => 'ANTIAF 2.5 MG CAJA X 100 TAB RECUB', 'imagen' => 'img/productos/antiaf.jpg'],
-    ['id' => 6, 'precio' => 18.00, 'descripcion' => 'Banes Forte 200Mg/5Ml Suspensión Oral', 'imagen' => 'img/productos/banes.jpg'],
-    ['id' => 7, 'precio' => 25.80, 'descripcion' => 'Bedoyecta Tri Solución Inyectable', 'imagen' => 'img/productos/bedoyecta.jpg'],
-    ['id' => 8, 'precio' => 60.00, 'descripcion' => 'Bisacodilo 5mg Tabletas Cjax100 AC Farma', 'imagen' => 'img/productos/bisacodilo.jpg'],
-    ['id' => 9, 'precio' => 27.60, 'descripcion' => 'Bismutol 87.33mg /5ml Suspensión Oral Sin Azúcar – Frasco 340 ML', 'imagen' => 'img/productos/bismutol.jpg'],
-    ['id' => 10, 'precio' => 30.00, 'descripcion' => 'Bonazol 20 Mg – Caja 30 UN', 'imagen' => 'img/productos/bonazol.jpg'],
-    ['id' => 11, 'precio' => 85.00, 'descripcion' => 'Castatina 500mg (Citicolina) Tableta – Cajax 10und', 'imagen' => 'img/productos/castatina.jpg'],
-    ['id' => 12, 'precio' => 80.00, 'descripcion' => 'Cetirizina IQ 10mg Tableta Recubierta', 'imagen' => 'img/productos/cetirizina.jpg'],
-    
-    ];
+$url = "https://localhost:7007/api/ProductosGetAllProductos";
 
-    if (isset($_POST['agregar'])) {
-        $id = $_POST['id'];
-        $cantidad = $_POST['cantidad'];
+// Inicializar cURL
+$ch = curl_init($url);
 
-        $producto_encontrado = false;
+// Configurar cURL
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Solo para pruebas locales, en producción deberías configurar correctamente SSL
 
-        foreach ($productos as $producto) {
-            if ($producto['id'] == $id) {
-                $producto_encontrado = true;
-                $producto_agregar = $producto;
-                break;
-            }
-        }
+// Ejecutar la solicitud
+$response = curl_exec($ch);
 
-        if ($producto_encontrado) {
-            $producto_agregar['cantidad'] = $cantidad;
-
-            if (!isset($_SESSION['carrito'])) {
-                $_SESSION['carrito'] = [];
-            }
-
-            $producto_existe = false;
-            foreach ($_SESSION['carrito'] as &$item) {
-                if ($item['id'] == $producto_agregar['id']) {
-                    $item['cantidad'] += $cantidad;
-                    $producto_existe = true;
-                    break;
-                }
-            }
-
-            if (!$producto_existe) {
-                $_SESSION['carrito'][] = $producto_agregar;
-            }
-        }
-
-        header('Location: carrito.php');
-        exit;
+// Verificar si hay errores
+if (curl_errno($ch)) {
+    echo 'Error en cURL: ' . curl_error($ch);
+    $productos = [];
+} else {
+    // Decodificar la respuesta JSON
+    $productos = json_decode($response, true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        echo 'Error al decodificar JSON: ' . json_last_error_msg();
+        $productos = [];
     }
-    ?>
+}
+
+// Cerrar cURL
+curl_close($ch);
+
+?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -194,29 +165,25 @@ session_start();
 
     <!-- Listado de productos -->
     <div class="container mt-5">
-        <h1>Productos</h1>
+        <h3 class="text-center">Nuestros Productos</h3>
         <div class="row">
-            <?php foreach ($productos as $producto): ?>
-                <div class="col-md-4 d-flex align-items-stretch">
-                    <div class="card mb-4">
-                        <div class="card-img-container">
-                        <img src="<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top" alt="">
-                        </div>
-                        <div class="card-body d-flex flex-column">
-                            <p class="card-text"><?php echo htmlspecialchars($producto['descripcion']); ?></p>
-                            <p class="card-text">S/. <?php echo htmlspecialchars($producto['precio']); ?> </p>
-                            <form method="post" action="productos.php">
-                                <input type="hidden" name="id" value="<?php echo $producto['id']; ?>">
-                                <div class="form-group">
-                                    <label for="cantidad">Cantidad:</label>
-                                    <input type="number" class="form-control" name="cantidad" value="1" min="1">
-                                </div>
-                                <button type="submit" name="agregar" class="btn btn-primary">Agregar al Carrito</button>
-                            </form>
+            <?php if (empty($productos)): ?>
+                <p class="text-center">No hay productos disponibles en este momento.</p>
+            <?php else: ?>
+                <?php foreach ($productos as $producto): ?>
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <div class="card-img-container">
+                                <img src="<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top" alt="">
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text"><?php echo htmlspecialchars($producto['descripcion']); ?></p>
+                                <a href="detalle.php?add=<?php echo htmlspecialchars($producto['cod']); ?>" class="btn btn-primary">Mas detalle</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </div>
 

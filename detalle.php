@@ -1,7 +1,15 @@
 <?php
 session_start();
 
-$url = "https://localhost:7007/api/ProductosGetAllProductos";
+
+
+// Verificar si se ha proporcionado el parámetro 'cod'
+if (!isset($_GET['add'])) {
+    die("Código de producto no especificado.");
+}
+
+$cod = htmlspecialchars($_GET['add']);
+$url = "https://localhost:7007/api/ProductosGetProductosDetails/" . $cod;
 
 // Inicializar cURL
 $ch = curl_init($url);
@@ -15,20 +23,22 @@ $response = curl_exec($ch);
 
 // Verificar si hay errores
 if (curl_errno($ch)) {
-    echo 'Error en cURL: ' . curl_error($ch);
-    $productos = [];
+    die('Error en cURL: ' . curl_error($ch));
 } else {
     // Decodificar la respuesta JSON
-    $productos = json_decode($response, true);
+    $producto = json_decode($response, true);
     if (json_last_error() !== JSON_ERROR_NONE) {
-        echo 'Error al decodificar JSON: ' . json_last_error_msg();
-        $productos = [];
+        die('Error al decodificar JSON: ' . json_last_error_msg());
     }
 }
 
 // Cerrar cURL
 curl_close($ch);
 
+// Verificar si el producto existe
+if (empty($producto)) {
+    die("Producto no encontrado.");
+}
 ?>
 
 <!DOCTYPE html>
@@ -36,27 +46,27 @@ curl_close($ch);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos</title>
+    <title>Detalle del Producto</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-      body{
-        background-image: url('img/fondo2.jpeg');
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-      }
-      .card-img-container {
-        height: 200px; /* Ajusta esta altura según tus necesidades */
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .card-img-top {
-        max-height: 100%;
-        width: auto;
-        object-fit: cover;
-      }
+        body {
+            background-image: url('img/fondo2.jpeg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        .card-img-container {
+            height: 400px; /* Ajusta esta altura según tus necesidades */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card-img-top {
+            max-height: 100%;
+            width: auto;
+            object-fit: cover;
+        }
     </style>
 </head>
 <body>
@@ -108,26 +118,16 @@ curl_close($ch);
     </nav>
 
     <div class="container mt-5">
-        <h3 class="text-center">Nuestros Productos</h3>
-        <div class="row">
-            <?php if (empty($productos)): ?>
-                <p class="text-center">No hay productos disponibles en este momento.</p>
-            <?php else: ?>
-                <?php foreach ($productos as $producto): ?>
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <div class="card-img-container">
-                                <img src="<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top" alt="">
-                            </div>
-                            <div class="card-body">
-                                <p class="card-text"><?php echo htmlspecialchars($producto['descripcion']); ?></p>
-                                <p class="card-text">$<?php echo htmlspecialchars($producto['precio']); ?></p>
-                                <a href="carrito.php?add=<?php echo htmlspecialchars($producto['cod']); ?>" class="btn btn-primary">Añadir al Carrito</a>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php endif; ?>
+        <h3 class="text-center">Detalle del Producto</h3>
+        <div class="card mb-4">
+            <div class="card-img-container">
+                <img src="<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top" alt="">
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"><?php echo htmlspecialchars($producto['descripcion']); ?></h5>
+                <p class="card-text">$<?php echo htmlspecialchars($producto['precio']); ?></p>
+                <a href="carrito.php?add=<?php echo htmlspecialchars($producto['cod']); ?>" class="btn btn-primary">Añadir al Carrito</a>
+            </div>
         </div>
     </div>
 
@@ -136,3 +136,4 @@ curl_close($ch);
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+

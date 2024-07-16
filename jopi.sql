@@ -27,7 +27,8 @@ CREATE TABLE usuarios(
 -- Crear la tabla productos
 DROP TABLE IF EXISTS productos;
 CREATE TABLE productos(
-    id_producto INT PRIMARY KEY AUTO_INCREMENT,
+    id_producto INT PRIMARY KEY,
+    cod INT,
     descripcion TEXT,
     precio DECIMAL(10, 2) NOT NULL,
     imagen VARCHAR(255)
@@ -44,19 +45,19 @@ CREATE TABLE pedidos (
 );
 
 -- Insertar datos de ejemplo en la tabla productos
-INSERT INTO productos (descripcion, precio, imagen) VALUES
-('Acetazolamida 250mg Tableta cjax100 AC farma', 80.00, 'img/productos/acetazolamida.jpg'),
-('Aci-Tip 800mg-60mg/10ml Suspensión – Frasco 200 ML', 80.00, 'img/productos/acitip.jpg'),
-('Amiodarona 200mg Tableta Recubierta cjax100 AC Farma', 80.00, 'img/productos/amiodarona.jpg'),
-('Anaflex Mujer NF 200mg Cápsula Blanda', 80.00, 'img/productos/anaflex.jpg'),
-('ANTIAF 2.5 MG CAJA X 100 TAB RECUB', 80.00, 'img/productos/antiaf.jpg'),
-('Banes Forte 200Mg/5Ml Suspensión Oral', 80.00, 'img/productos/banes.jpg'),
-('Bedoyecta Tri Solución Inyectable', 80.00, 'img/productos/bedoyecta.jpg'),
-('Bisacodilo 5mg Tabletas Cjax100 AC Farma', 80.00, 'img/productos/bisacodilo.jpg'),
-('Bismutol 87.33mg /5ml Suspensión Oral Sin Azúcar – Frasco 340 ML', 80.00, 'img/productos/bismutol.jpg'),
-('Bonazol 20 Mg – Caja 30 UN', 80.00, 'img/productos/bonazol.jpg'),
-('Castatina 500mg (Citicolina) Tableta – Cajax 10und', 80.00, 'img/productos/castatina.jpg'),
-('Cetirizina IQ 10mg Tableta Recubierta', 80.00, 'img/productos/cetirizina.jpg');
+INSERT INTO productos (id_producto, cod, descripcion, precio, imagen) VALUES
+(1, 1, 'Acetazolamida 250mg Tableta cjax100 AC farma', 80.00, 'img/productos/acetazolamida.jpg'),
+(2, 2, 'Aci-Tip 800mg-60mg/10ml Suspensión – Frasco 200 ML', 80.00, 'img/productos/acitip.jpg'),
+(3, 3, 'Amiodarona 200mg Tableta Recubierta cjax100 AC Farma', 80.00, 'img/productos/amiodarona.jpg'),
+(4, 4, 'Anaflex Mujer NF 200mg Cápsula Blanda', 80.00, 'img/productos/anaflex.jpg'),
+(5, 5, 'ANTIAF 2.5 MG CAJA X 100 TAB RECUB', 80.00, 'img/productos/antiaf.jpg'),
+(6, 6, 'Banes Forte 200Mg/5Ml Suspensión Oral', 80.00, 'img/productos/banes.jpg'),
+(7, 7, 'Bedoyecta Tri Solución Inyectable', 80.00, 'img/productos/bedoyecta.jpg'),
+(8, 8, 'Bisacodilo 5mg Tabletas Cjax100 AC Farma', 80.00, 'img/productos/bisacodilo.jpg'),
+(9, 9, 'Bismutol 87.33mg /5ml Suspensión Oral Sin Azúcar – Frasco 340 ML', 80.00, 'img/productos/bismutol.jpg'),
+(10, 10, 'Bonazol 20 Mg – Caja 30 UN', 80.00, 'img/productos/bonazol.jpg'),
+(11, 11, 'Castatina 500mg (Citicolina) Tableta – Cajax 10und', 80.00, 'img/productos/castatina.jpg'),
+(12, 12, 'Cetirizina IQ 10mg Tableta Recubierta', 80.00, 'img/productos/cetirizina.jpg');
 
 -- Procedimiento almacenado para login
 DROP PROCEDURE IF EXISTS SP_Login;
